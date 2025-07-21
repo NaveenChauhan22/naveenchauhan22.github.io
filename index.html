@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>QA Facts: Neon Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    :root{
+      --cyan:#00f5ff;
+      --pink:#ff006e;
+      --bg:#050505;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"JetBrains Mono","Courier New",monospace;
+      background:var(--bg);
+      color:#fff;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    /* animated grid */
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg,#0004 1px,transparent 1px) 0 0 / 40px 40px,
+        linear-gradient(#0004 1px,transparent 1px) 0 0 / 40px 40px;
+      animation:slide 8s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes slide{to{background-position:0 800px,800px 0}}
+
+    /* scanlines */
+    body::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(
+        0deg,
+        transparent 0 2px,
+        rgba(0,245,255,.08) 2px 4px
+      );
+      pointer-events:none;
+    }
+
+    h1{
+      font-size:clamp(2rem,4vw,3.5rem);
+      letter-spacing:.1em;
+      color:var(--cyan);
+      text-shadow:
+        0 0 5px var(--cyan),
+        0 0 10px var(--cyan),
+        0 0 20px var(--cyan);
+      margin-bottom:2rem;
+      animation:pulse 2s ease-in-out infinite alternate;
+    }
+    @keyframes pulse{from{opacity:.8}to{opacity:1}}
+
+    #factBox{
+      position:relative;
+      max-width:700px;
+      padding:2.5rem 3rem;
+      border:2px solid var(--cyan);
+      border-radius:10px;
+      background:rgba(5,5,5,.6);
+      backdrop-filter:blur(8px);
+      font-size:clamp(1.1rem,2.5vw,1.6rem);
+      line-height:1.6;
+      box-shadow:
+        0 0 10px var(--cyan),
+        inset 0 0 10px rgba(0,245,255,.2);
+      overflow:hidden;
+      transition:transform .4s cubic-bezier(.17,.67,.12,.99);
+    }
+    /* glitch clip */
+    .glitch{
+      animation:glitch .35s linear;
+    }
+    @keyframes glitch{
+      0%{transform:translate(0)}
+      20%{transform:translate(-2px,2px)}
+      40%{transform:translate(-2px,-2px)}
+      60%{transform:translate(2px,2px)}
+      80%{transform:translate(2px,-2px)}
+      100%{transform:translate(0)}
+    }
+
+    button{
+      margin-top:2.5rem;
+      padding:1rem 2.2rem;
+      font-size:1.1rem;
+      letter-spacing:.05em;
+      color:#000;
+      background:linear-gradient(45deg,var(--cyan),var(--pink));
+      background-size:300%;
+      border:none;
+      border-radius:50px;
+      cursor:pointer;
+      transition:all .3s;
+      position:relative;
+      z-index:1;
+    }
+    button::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:50px;
+      background:linear-gradient(45deg,var(--cyan),var(--pink));
+      z-index:-1;
+      filter:blur(10px);
+      opacity:.7;
+      transition:opacity .3s;
+    }
+    button:hover{
+      background-position:right;
+    }
+    button:hover::before{
+      opacity:1;
+    }
+    button:active{
+      transform:scale(.96);
+    }
+
+    footer{
+      position:absolute;
+      bottom:12px;
+      font-size:.75rem;
+      color:#555;
+    }
+  </style>
+</head>
+<body>
+  <h1>QA Facts: Neon Edition</h1>
+
+  <div id="factBox">Initializing sarcasm engine…</div>
+
+  <button onclick="nextFact()">Deploy next joke</button>
+
+  <footer>
+    *May contain traces of sarcasm. No actual bugs were harmed in the making of this website.
+  </footer>
+
+  <script>
+    const facts = [
+      "QA engineers don’t break software—we simply reveal where it was already broken.",
+      "If a developer fixes a bug and no one writes a regression test, did it really happen?",
+      "QA walks into a bar. Orders 1 beer, 0 beers, -1 beers, 999999999 beers, and a 🦄. Bar catches fire.",
+      "Schrödinger’s Release: simultaneously ‘ready to ship’ and ‘needs more testing’ until management opens the box.",
+      "99 little bugs in the code, 99 little bugs. Take one down, patch it around… 127 little bugs in the code.",
+      "A QA analyst’s favorite fairy tale? Goldilocks and the Three Edge Cases.",
+      "Unit tests: proof the code works on the developer’s machine. QA tests: proof the universe still has surprises.",
+      "The five stages of debugging: denial, anger, bargaining, depression, and finally… renaming the ticket to ‘feature request’.",
+      "Why did the tester cross the road? To verify the chicken reached the other side under every possible traffic condition.",
+      "QA’s love language: detailed steps to reproduce.",
+      "Performance testing is just seeing how long you can hold your breath while the server’s on fire.",
+      "Behind every successful product launch is a QA team frantically turning coffee into bug reports.",
+      "If you can’t measure it, you can’t improve it. If you can measure it, QA has probably already filed three bugs about the ruler.",
+      "A bug in production is worth two in the backlog.",
+      "Pro tip: never test with real users—they’re the worst edge case."
+    ];
+
+    const box = document.getElementById('factBox');
+
+    function nextFact(){
+      box.classList.add('glitch');
+      setTimeout(()=>{
+        box.textContent = facts[Math.floor(Math.random()*facts.length)];
+        box.classList.remove('glitch');
+      },180);
+    }
+
+    // initial load
+    nextFact();
+  </script>
+</body>
+</html>
